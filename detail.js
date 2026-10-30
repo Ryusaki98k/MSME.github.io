@@ -148,7 +148,6 @@ const DETAIL_CONTENT = {
 
 function renderPdfSection(data) {
   if (!data.pdfs || data.pdfs.length === 0) return '';
-
   const itemsHtml = data.pdfs
     .map((file) => {
       const src = encodeURI(file);
@@ -161,7 +160,6 @@ function renderPdfSection(data) {
         </li>`;
     })
     .join('');
-
   return `
     <section class="detail-pdfs">
       <h2><i class="fa-solid fa-file-lines"></i> เอกสารประกอบ</h2>
@@ -173,7 +171,6 @@ function renderPdfSection(data) {
 function renderHeroImage(data) {
   const images = data.images || (data.image ? [data.image] : []);
   if (images.length === 0) return '';
-
   if (images.length === 1) {
     return `
       <div class="detail-hero-img">
@@ -181,7 +178,6 @@ function renderHeroImage(data) {
       </div>
     `;
   }
-
   const slidesHtml = images
     .map(
       (src, i) => `
@@ -190,14 +186,12 @@ function renderHeroImage(data) {
         </div>`
     )
     .join('');
-
   const dotsHtml = images
     .map(
       (_, i) =>
         `<button type="button" class="detail-carousel-dot${i === 0 ? ' active' : ''}" aria-label="ภาพที่ ${i + 1}" data-index="${i}"></button>`
     )
     .join('');
-
   return `
     <div class="detail-hero-img detail-hero-carousel" data-interval="4000">
       <div class="detail-carousel-track">${slidesHtml}</div>
@@ -215,90 +209,130 @@ function renderHeroImage(data) {
 function initDetailGallery() {
   const carousel = document.querySelector('.detail-hero-carousel');
   if (!carousel) return;
-
   const track = carousel.querySelector('.detail-carousel-track');
   const slides = carousel.querySelectorAll('.detail-carousel-slide');
   const dots = carousel.querySelectorAll('.detail-carousel-dot');
   const prevBtn = carousel.querySelector('.carousel-prev');
   const nextBtn = carousel.querySelector('.carousel-next');
-
   if (!track || slides.length < 2) return;
-
   let current = 0;
   let timerId = null;
-
   function updatePosition() {
     const offset = current * carousel.clientWidth;
     track.style.transform = `translate3d(-${offset}px, 0, 0)`;
   }
-
   function goTo(index) {
     current = (index + slides.length) % slides.length;
     updatePosition();
     dots.forEach((dot, i) => dot.classList.toggle('active', i === current));
   }
-
   function startAutoplay() {
     clearInterval(timerId);
     const interval = parseInt(carousel.dataset.interval, 10) || 4000;
     timerId = setInterval(() => goTo(current + 1), interval);
   }
-
   function stopAutoplay() {
     clearInterval(timerId);
   }
-
-  prevBtn?.addEventListener('click', () => {
-    goTo(current - 1);
-    startAutoplay();
-  });
-
-  nextBtn?.addEventListener('click', () => {
-    goTo(current + 1);
-    startAutoplay();
-  });
-
+  prevBtn?.addEventListener('click', () => { goTo(current - 1); startAutoplay(); });
+  nextBtn?.addEventListener('click', () => { goTo(current + 1); startAutoplay(); });
   dots.forEach((dot) => {
     dot.addEventListener('click', () => {
       goTo(parseInt(dot.dataset.index, 10));
       startAutoplay();
     });
   });
-
   carousel.addEventListener('mouseenter', stopAutoplay);
   carousel.addEventListener('mouseleave', startAutoplay);
-
   let touchStartX = 0;
-  carousel.addEventListener(
-    'touchstart',
-    (e) => {
-      touchStartX = e.changedTouches[0].screenX;
-    },
-    { passive: true }
-  );
-
-  carousel.addEventListener(
-    'touchend',
-    (e) => {
-      const diff = e.changedTouches[0].screenX - touchStartX;
-      if (Math.abs(diff) < 40) return;
-      if (diff < 0) goTo(current + 1);
-      else goTo(current - 1);
-      startAutoplay();
-    },
-    { passive: true }
-  );
-
+  carousel.addEventListener('touchstart', (e) => { touchStartX = e.changedTouches[0].screenX; }, { passive: true });
+  carousel.addEventListener('touchend', (e) => {
+    const diff = e.changedTouches[0].screenX - touchStartX;
+    if (Math.abs(diff) < 40) return;
+    if (diff < 0) goTo(current + 1);
+    else goTo(current - 1);
+    startAutoplay();
+  }, { passive: true });
   window.addEventListener('resize', updatePosition);
   updatePosition();
   startAutoplay();
 }
 
+function formatDateThai(dateStr) {
+  if (!dateStr) return '';
+  const date = new Date(dateStr);
+  const day = date.getDate();
+  const months = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.'];
+  const month = months[date.getMonth()];
+  const year = date.getFullYear() + 543;
+  return `${day} ${month} ${year}`;
+}
+
+function renderDetailFromSupabase(post) {
+  const container = document.getElementById('detail-content');
+  document.title = `${post.title} — สมาพันธ์ MSME ไทย`;
+
+  const images = post.cover_image ? [post.cover_image] : [];
+  const data = {
+    title: post.title,
+    tag: post.category,
+    date: formatDateThai(post.post_date) + (post.post_date_end ? ' – ' + formatDateThai(post.post_date_end) : ''),
+    images: images,
+    paragraphs: post.content ? [post.content] : [],
+    highlights: [],
+  };
+
+  const highlightsHtml = '';
+  const paragraphsHtml = data.paragraphs.map((p) => `<p>${p}</p>`).join('');
+
+  container.innerHTML = `
+    <header class="detail-header">
+      <span class="tag">${data.tag}</span>
+      <h1>${data.title}</h1>
+      <time>${data.date}</time>
+    </header>
+    ${renderHeroImage(data)}
+    <div class="detail-body">
+      ${paragraphsHtml}
+    </div>
+    <div class="detail-actions">
+      <a href="index.html" class="btn-detail btn-detail-outline"><i class="fa-solid fa-arrow-left"></i> กลับหน้าแรก</a>
+      <a href="news.html" class="btn-detail"><i class="fa-solid fa-newspaper"></i> ดูข่าวทั้งหมด</a>
+    </div>
+  `;
+
+  initDetailGallery();
+}
+
 function renderDetail() {
   const container = document.getElementById('detail-content');
   const id = new URLSearchParams(window.location.search).get('id');
-  const data = DETAIL_CONTENT[id];
 
+  // Try Supabase first
+  if (window.supabase && id) {
+    supabase
+      .from('posts')
+      .select('*')
+      .eq('slug', id)
+      .eq('status', 'published')
+      .single()
+      .then(({ data: post, error }) => {
+        if (!error && post) {
+          renderDetailFromSupabase(post);
+          return;
+        }
+        // Fallback to static data
+        renderDetailStatic(id, container);
+      })
+      .catch(() => renderDetailStatic(id, container));
+    return;
+  }
+
+  renderDetailStatic(id, container);
+}
+
+function renderDetailStatic(id, container) {
+  const data = DETAIL_CONTENT[id];
   if (!data) {
     document.title = 'ไม่พบข้อมูล — สมาพันธ์ MSME ไทย';
     container.innerHTML = `
@@ -310,17 +344,9 @@ function renderDetail() {
     `;
     return;
   }
-
   document.title = `${data.title} — สมาพันธ์ MSME ไทย`;
-
-  const highlightsHtml = data.highlights
-    .map((item) => `<li>${item}</li>`)
-    .join('');
-
-  const paragraphsHtml = data.paragraphs
-    .map((p) => `<p>${p}</p>`)
-    .join('');
-
+  const highlightsHtml = (data.highlights || []).map((item) => `<li>${item}</li>`).join('');
+  const paragraphsHtml = (data.paragraphs || []).map((p) => `<p>${p}</p>`).join('');
   container.innerHTML = `
     <header class="detail-header">
       <span class="tag">${data.tag}</span>
@@ -330,19 +356,26 @@ function renderDetail() {
     ${renderHeroImage(data)}
     <div class="detail-body">
       ${paragraphsHtml}
-      <div class="detail-highlights">
-        <h2><i class="fa-solid fa-circle-check"></i> สรุปสำคัญ</h2>
-        <ul>${highlightsHtml}</ul>
-      </div>
+      ${highlightsHtml ? `<div class="detail-highlights"><h2><i class="fa-solid fa-circle-check"></i> สรุปสำคัญ</h2><ul>${highlightsHtml}</ul></div>` : ''}
       ${renderPdfSection(data)}
     </div>
     <div class="detail-actions">
       <a href="index.html" class="btn-detail btn-detail-outline"><i class="fa-solid fa-arrow-left"></i> กลับหน้าแรก</a>
-      <a href="#" class="btn-detail"><i class="fa-solid fa-envelope"></i> สอบถามเพิ่มเติม</a>
+      <a href="news.html" class="btn-detail"><i class="fa-solid fa-newspaper"></i> ดูข่าวทั้งหมด</a>
     </div>
   `;
-
   initDetailGallery();
 }
 
-renderDetail();
+function loadSupabaseScript() {
+  return new Promise((resolve) => {
+    if (window.supabaseReady && window.supabase) { resolve(); return; }
+    window.addEventListener('supabase-ready', () => resolve(), { once: true });
+    setTimeout(resolve, 5000);
+  });
+}
+
+loadSupabaseScript().then(() => {
+  // Wait for config.js to load supabase client
+  setTimeout(renderDetail, 100);
+});

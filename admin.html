@@ -1,0 +1,88 @@
+﻿<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - MSME</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .admin-layout { display: flex; min-height: 80vh; gap: 0; }
+    .admin-sidebar { width: 220px; background: var(--purple); color: var(--white); padding: 20px 0; border-radius: var(--radius) 0 0 var(--radius); flex-shrink: 0; }
+    .admin-sidebar a { display: flex; align-items: center; gap: 10px; padding: 12px 20px; color: rgba(255,255,255,0.8); cursor: pointer; transition: background 0.2s; font-size: 14px; }
+    .admin-sidebar a:hover, .admin-sidebar a.active { background: rgba(255,255,255,0.15); color: var(--white); }
+    .admin-sidebar a i { width: 20px; text-align: center; color: var(--yellow); }
+    .admin-main { flex: 1; padding: 24px; background: var(--white); border-radius: 0 var(--radius) var(--radius) 0; box-shadow: var(--shadow); overflow: auto; }
+    .admin-main h2 { color: var(--purple); margin-bottom: 16px; font-size: 20px; }
+    .admin-card { background: var(--grey-bg); border-radius: var(--radius); padding: 20px; margin-bottom: 16px; }
+    .admin-card h3 { color: var(--purple); margin-bottom: 12px; font-size: 16px; }
+    .admin-form-group { margin-bottom: 12px; }
+    .admin-form-group label { display: block; font-weight: 500; margin-bottom: 4px; font-size: 14px; }
+    .admin-form-group input, .admin-form-group textarea, .admin-form-group select {
+      width: 100%; padding: 8px 12px; border: 1px solid #ddd; border-radius: 6px;
+      font-family: var(--font); font-size: 14px;
+    }
+    .admin-form-group textarea { resize: vertical; min-height: 80px; }
+    .btn-admin { padding: 8px 20px; border: none; border-radius: 6px; cursor: pointer; font-family: var(--font); font-size: 14px; font-weight: 500; }
+    .btn-admin-primary { background: var(--purple); color: var(--white); }
+    .btn-admin-primary:hover { background: var(--purple-dark); }
+    .btn-admin-secondary { background: var(--grey-bg); color: var(--text); border: 1px solid #ddd; }
+    .btn-admin-danger { background: #e74c3c; color: var(--white); }
+    .admin-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .admin-table th, .admin-table td { padding: 8px 12px; text-align: left; border-bottom: 1px solid #eee; }
+    .admin-table th { background: var(--purple-pale); color: var(--purple); font-weight: 600; }
+    .admin-table tr:hover { background: var(--grey-bg); }
+    .status-badge { padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+    .status-published { background: #d4edda; color: #155724; }
+    .status-draft { background: #fff3cd; color: #856404; }
+    .admin-toast { position: fixed; bottom: 20px; right: 20px; padding: 12px 24px; border-radius: 8px; color: var(--white); z-index: 9999; display: none; }
+    .admin-toast.success { background: var(--green); }
+    .admin-toast.error { background: #e74c3c; }
+    .section-editor { border: 1px solid #eee; border-radius: var(--radius); padding: 16px; margin-bottom: 12px; }
+    .section-editor h4 { color: var(--purple); margin-bottom: 8px; }
+    @media (max-width: 768px) {
+      .admin-layout { flex-direction: column; }
+      .admin-sidebar { width: 100%; border-radius: var(--radius) var(--radius) 0 0; display: flex; overflow-x: auto; }
+      .admin-sidebar a { white-space: nowrap; }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <span><i class="fa-solid fa-phone"></i> 061-635-8915</span>
+      <span><i class="fa-solid fa-envelope"></i> info@msme-nakhonsawan.or.th</span>
+      <div class="top-bar-links">
+        <a href="index.html">กลับหน้าแรก</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <img src="img/msmeimg (1).png" alt="MSME" class="logo-icon">
+        <span class="logo-text"><strong>MSME</strong><small> Nakornsawan Admin</small></span>
+      </a>
+      <nav class="main-nav">
+        <a href="index.html">หน้าแรก</a>
+      </nav>
+      <button class="nav-toggle"><i class="fa-solid fa-bars"></i></button>
+    </div>
+  </header>
+
+  <main class="container" style="padding: 24px 12px;">
+    <div id="admin-content">
+      <p class="detail-loading">กำลังโหลด...</p>
+    </div>
+  </main>
+
+  <div id="admin-toast" class="admin-toast"></div>
+
+  <script src="config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

@@ -1,102 +1,132 @@
-const GALLERY_ALBUMS = {
-  'western-forest': {
-    title: 'การพัฒนาพื้นที่แถบป่ากันชนผืนป่าตะวันตก',
-    folder: 'img/buffer zone of the Western Forest',
-    files: [
-      'msmeimg (1)(1).jpg', 'msmeimg (1).jpg', 'msmeimg (10)(1).jpg', 'msmeimg (10).jpg',
-      'msmeimg (11)(1).jpg', 'msmeimg (11).jpg', 'msmeimg (12)(1).jpg', 'msmeimg (12).jpg',
-      'msmeimg (13)(1).jpg', 'msmeimg (13).jpg', 'msmeimg (14)(1).jpg', 'msmeimg (14).jpg',
-      'msmeimg (2)(1).jpg', 'msmeimg (2).jpg', 'msmeimg (20).jpg', 'msmeimg (21).jpg',
-      'msmeimg (22).jpg', 'msmeimg (3)(1).jpg', 'msmeimg (3).jpg', 'msmeimg (4)(1).jpg',
-      'msmeimg (4).jpg', 'msmeimg (40).jpg', 'msmeimg (41).jpg', 'msmeimg (42).jpg',
-      'msmeimg (43)(1).jpg', 'msmeimg (43).jpg', 'msmeimg (44)(1).jpg', 'msmeimg (44).jpg',
-      'msmeimg (45)(1).jpg', 'msmeimg (45).jpg', 'msmeimg (46)(1).jpg', 'msmeimg (46).jpg',
-      'msmeimg (47)(1).jpg', 'msmeimg (47).jpg', 'msmeimg (48)(1).jpg', 'msmeimg (48).jpg',
-      'msmeimg (49)(1).jpg', 'msmeimg (49).jpg', 'msmeimg (5)(1).jpg', 'msmeimg (5).jpg',
-      'msmeimg (50)(1).jpg', 'msmeimg (50).jpg', 'msmeimg (51)(1).jpg', 'msmeimg (51).jpg',
-      'msmeimg (52)(1).jpg', 'msmeimg (52).jpg', 'msmeimg (53)(1).jpg', 'msmeimg (53).jpg',
-      'msmeimg (54)(1).jpg', 'msmeimg (54).jpg', 'msmeimg (55).jpg', 'msmeimg (56).jpg',
-      'msmeimg (57).jpg', 'msmeimg (6)(1).jpg', 'msmeimg (6).jpg', 'msmeimg (7)(1).jpg',
-      'msmeimg (7).jpg', 'msmeimg (8)(1).jpg', 'msmeimg (8).jpg', 'msmeimg (9)(1).jpg',
-      'msmeimg (9).jpg',
-    ],
-  },
-  'nut-processing': {
-    title: 'พัฒนาความรู้ด้านการปลูกและแปรรูปมะม่วงหิมพานต์',
-    folder: 'img/nut processing',
-    files: [
-      'msmeimg (68).jpg', 'msmeimg (69).jpg', 'msmeimg (70).jpg', 'msmeimg (71).jpg',
-      'msmeimg (72).jpg', 'msmeimg (73).jpg', 'msmeimg (74).jpg', 'msmeimg (75).jpg',
-      'msmeimg (76).jpg', 'msmeimg (77).jpg', 'msmeimg (78).jpg',
-    ],
-  },
-  'thai-medicine': {
-    title: 'การแพทย์แผนไทย สมุนไพรและการแพทย์ทางเลือก',
-    folder: 'img/Thai medicine and herbal',
-    files: [
-      'msmeimg (58).jpg', 'msmeimg (59).jpg', 'msmeimg (60).jpg', 'msmeimg (61).jpg',
-      'msmeimg (62).jpg', 'msmeimg (63).jpg', 'msmeimg (64).jpg', 'msmeimg (65).jpg',
-      'msmeimg (66).jpg', 'msmeimg (67).jpg',
-    ],
-  },
-  'sme-events': {
-    title: 'กิจกรรมและอีเวนต์สมาพันธ์ MSME',
-    folder: 'img/Seminar for the Northern SME Federation Committee',
-    files: [
-      'msmeimg (18)(1).jpg', 'msmeimg (18).jpg', 'msmeimg (19)(1).jpg', 'msmeimg (19).jpg',
-      'msmeimg (23).jpg', 'msmeimg (24).jpg', 'msmeimg (25).jpg', 'msmeimg (26)(1).jpg',
-      'msmeimg (26).jpg', 'msmeimg (27)(1).jpg', 'msmeimg (27).jpg', 'msmeimg (28)(1).jpg',
-      'msmeimg (28).jpg', 'msmeimg (29)(1).jpg', 'msmeimg (29).jpg', 'msmeimg (30)(1).jpg',
-      'msmeimg (30).jpg', 'msmeimg (31)(1).jpg', 'msmeimg (31).jpg', 'msmeimg (32)(1).jpg',
-      'msmeimg (32).jpg', 'msmeimg (33)(1).jpg', 'msmeimg (33).jpg', 'msmeimg (34)(1).jpg',
-      'msmeimg (34).jpg', 'msmeimg (35)(1).jpg', 'msmeimg (35).jpg', 'msmeimg (36)(1).jpg',
-      'msmeimg (36).jpg', 'msmeimg (37)(1).jpg', 'msmeimg (37).jpg', 'msmeimg (38)(1).jpg',
-      'msmeimg (39).jpg', 'msmeimg (40)(1).jpg',
-    ],
-  },
-};
+(function () {
+  'use strict';
 
-function renderGallery() {
   const container = document.getElementById('gallery-content');
-  const id = new URLSearchParams(window.location.search).get('id');
-  const album = GALLERY_ALBUMS[id];
 
-  if (!album) {
-    document.title = 'ไม่พบอัลบั้ม — สมาพันธ์ MSME ไทย';
-    container.innerHTML = `
-      <div class="detail-not-found">
-        <h1>ไม่พบอัลบั้มรูปภาพ</h1>
-        <p>ลิงก์อาจไม่ถูกต้องหรือถูกลบแล้ว</p>
-        <a href="index.html" class="btn-detail">กลับหน้าแรก</a>
-      </div>
-    `;
-    return;
+  function loadSupabase() {
+    return new Promise((resolve, reject) => {
+      if (window.supabaseReady && window.supabase) { resolve(); return; }
+      window.addEventListener('supabase-ready', () => resolve(), { once: true });
+      setTimeout(() => { if (window.supabase) resolve(); else reject(); }, 5000);
+    });
   }
 
-  document.title = `${album.title} — สมาพันธ์ MSME ไทย`;
+  async function renderGallery() {
+    if (!container) return;
 
-  const imagesHtml = album.files
-    .map((file, i) => {
-      const src = `${album.folder}/${file}`;
-      const alt = `${album.title} — ภาพที่ ${i + 1}`;
-      return `
+    const id = new URLSearchParams(window.location.search).get('id');
+
+    // If no id, show album list
+    if (!id) {
+      container.innerHTML = '<p class="detail-loading">กำลังโหลดอัลบั้ม...</p>';
+      try {
+        const { data: albums, error } = await supabase
+          .from('albums')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (!albums || albums.length === 0) {
+          container.innerHTML = '<p class="detail-loading">ไม่พบอัลบั้ม</p>';
+          return;
+        }
+
+        const cardsHtml = albums.map((album) => `
+          <a href="gallery.html?id=${encodeURIComponent(album.id)}" class="sme-card event-folder-card">
+            <div class="event-folder-thumb">
+              ${album.cover_image ? `<img src="${album.cover_image}" alt="${album.title}" loading="lazy">` : ''}
+            </div>
+            <h3>${escapeHtml(album.title)}</h3>
+            <p>${escapeHtml(album.description || '')}</p>
+            <span class="btn-green">ดูรูปทั้งหมด</span>
+          </a>
+        `).join('');
+
+        container.innerHTML = `
+          <header class="detail-header">
+            <span class="tag">อัลบั้มรูปภาพ</span>
+            <h1>อัลบั้มรูปภาพ</h1>
+          </header>
+          <div class="detail-body">
+            <div class="sme-cards" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr));">${cardsHtml}</div>
+          </div>
+        `;
+      } catch (err) {
+        console.error('Error loading albums:', err);
+        container.innerHTML = '<p class="detail-loading">ไม่สามารถโหลดอัลบั้มได้</p>';
+      }
+      return;
+    }
+
+    // Show specific album
+    container.innerHTML = '<p class="detail-loading">กำลังโหลดรูปภาพ...</p>';
+    try {
+      const { data: album, error: albumError } = await supabase
+        .from('albums')
+        .select('*')
+        .eq('id', id)
+        .single();
+
+      if (albumError || !album) {
+        container.innerHTML = `
+          <div class="detail-not-found">
+            <h1>ไม่พบอัลบั้มรูปภาพ</h1>
+            <p>ลิงก์อาจไม่ถูกต้องหรือถูกลบแล้ว</p>
+            <a href="gallery.html" class="btn-detail">กลับ</a>
+          </div>
+        `;
+        return;
+      }
+
+      document.title = `${album.title} — สมาพันธ์ MSME ไทย`;
+
+      const { data: images, error: imgError } = await supabase
+        .from('album_images')
+        .select('*')
+        .eq('album_id', id)
+        .order('sort_order', { ascending: true });
+
+      if (imgError) throw imgError;
+
+      const imagesHtml = (images || []).map((img, i) => `
         <button type="button" class="gallery-item">
-          <img src="${src}" alt="${alt}" loading="lazy">
-        </button>`;
-    })
-    .join('');
+          <img src="${img.image_url}" alt="${escapeHtml(img.caption || album.title + ' — ภาพที่ ' + (i + 1))}" loading="lazy">
+        </button>
+      `).join('');
 
-  container.innerHTML = `
-    <header class="detail-header">
-      <span class="tag">อัลบั้มรูปภาพ</span>
-      <h1>${album.title}</h1>
-      <p class="gallery-count">ทั้งหมด ${album.files.length} ภาพ — คลิกเพื่อดูภาพเต็ม</p>
-    </header>
-    <div class="gallery-grid">${imagesHtml}</div>
-    <div class="detail-actions">
-      <a href="index.html#events-section" class="btn-detail btn-detail-outline"><i class="fa-solid fa-arrow-left"></i> กลับหน้าแรก</a>
-    </div>
-  `;
-}
+      container.innerHTML = `
+        <header class="detail-header">
+          <span class="tag">อัลบั้มรูปภาพ</span>
+          <h1>${escapeHtml(album.title)}</h1>
+          <p class="gallery-count">ทั้งหมด ${(images || []).length} ภาพ — คลิกเพื่อดูภาพเต็ม</p>
+        </header>
+        <div class="gallery-grid">${imagesHtml}</div>
+        <div class="detail-actions">
+          <a href="gallery.html" class="btn-detail btn-detail-outline"><i class="fa-solid fa-arrow-left"></i> กลับอัลบั้มทั้งหมด</a>
+        </div>
+      `;
+    } catch (err) {
+      console.error('Error loading album:', err);
+      container.innerHTML = '<p class="detail-loading">ไม่สามารถโหลดอัลบั้มได้</p>';
+    }
+  }
 
-renderGallery();
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  async function init() {
+    try {
+      await loadSupabase();
+      await renderGallery();
+    } catch (err) {
+      console.error('Init error:', err);
+      if (container) container.innerHTML = '<p class="detail-loading">ไม่สามารถโหลดได้</p>';
+    }
+  }
+
+  init();
+})();

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ข่าวสาร &amp; กิจกรรมล่าสุด — สมาพันธ์ MSME ไทย จังหวัดนครสวรรค์</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <div class="top-bar">
+    <div class="container top-bar-inner">
+      <span><i class="fa-solid fa-phone"></i> 061-635-8915</span>
+      <span><i class="fa-solid fa-envelope"></i> info@msme-nakhonsawan.or.th</span>
+      <div class="top-bar-links">
+        <a href="index.html">หน้าแรก</a>
+        <a href="#">Facebook</a>
+        <a href="#">Line Official</a>
+        <a href="#">English</a>
+      </div>
+    </div>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html" class="logo">
+        <img src="img/msmeimg (1).png" alt="สมาพันธ์ MSME ไทย จังหวัดนครสวรรค์" class="logo-icon">
+        <span class="logo-text">
+          <strong>สมาพันธ์ MSME ไทย</strong>
+          <small>จังหวัดนครสวรรค์</small>
+        </span>
+      </a>
+      <nav class="main-nav" aria-label="เมนูหลัก">
+        <a href="index.html">หน้าแรก</a>
+        <span class="nav-divider"></span>
+        <a href="#">เกี่ยวกับเรา</a>
+        <span class="nav-divider"></span>
+        <a href="#">โครงการ</a>
+        <span class="nav-divider"></span>
+        <a href="#">สมาชิก &amp; เครือข่าย</a>
+        <span class="nav-divider"></span>
+        <a href="news.html" class="active">ข่าวสาร</a>
+        <span class="nav-divider"></span>
+        <a href="#">ติดต่อเรา</a>
+      </nav>
+      <button class="nav-toggle" aria-label="เปิดเมนู">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </header>
+
+  <main class="container detail-page">
+    <a href="index.html" class="detail-back"><i class="fa-solid fa-arrow-left"></i> กลับหน้าแรก</a>
+    <article class="detail-article">
+      <div class="detail-header">
+        <span class="tag">ข่าวสาร &amp; กิจกรรมล่าสุด</span>
+        <h1>ข่าวสาร &amp; กิจกรรมล่าสุด</h1>
+        <p class="gallery-count" id="news-count">กำลังโหลด...</p>
+      </div>
+      <div class="detail-body">
+        <!-- Category filter -->
+        <div class="news-filter" id="news-filter">
+          <button class="news-filter-btn active" data-category="">ทั้งหมด</button>
+          <button class="news-filter-btn" data-category="ข่าวประชาสัมพันธ์">ข่าวประชาสัมพันธ์</button>
+          <button class="news-filter-btn" data-category="ประชุม">ประชุม</button>
+          <button class="news-filter-btn" data-category="กิจกรรม">กิจกรรม</button>
+          <button class="news-filter-btn" data-category="โครงการ">โครงการ</button>
+        </div>
+        <!-- News grid -->
+        <div class="news-grid" id="news-grid">
+          <p class="detail-loading">กำลังโหลดข่าวสาร...</p>
+        </div>
+        <!-- Pagination -->
+        <div class="news-pagination" id="news-pagination"></div>
+      </div>
+    </article>
+  </main>
+
+  <section class="pre-footer">
+    <div class="container pre-footer-grid">
+      <div class="size-card">
+        <h3>Micro</h3>
+        <p>วิสาหกิจขนาดเล็กมาก<br>ลูกจ้างไม่เกิน 5 คน<br>รายได้ไม่เกิน 1.8 ล้านบาท</p>
+      </div>
+      <div class="size-card">
+        <h3>Small</h3>
+        <p>วิสาหกิจขนาดเล็ก<br>ลูกจ้างไม่เกิน 50 คน<br>รายได้ไม่เกิน 100 ล้านบาท</p>
+      </div>
+      <div class="size-card">
+        <h3>Medium</h3>
+        <p>วิสาหกิจขนาดกลาง<br>ลูกจ้างไม่เกิน 200 คน<br>รายได้ไม่เกิน 500 ล้านบาท</p>
+      </div>
+      <div class="size-card">
+        <h3>MSME</h3>
+        <p>Micro, Small &amp; Medium<br>Enterprise รวมทุกขนาด<br>ขับเคลื่อนเศรษฐกิจไทย</p>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div class="footer-col">
+        <div class="footer-logo">
+          <img src="img/msmeimg (1).png" alt="สมาพันธ์ MSME ไทย" class="logo-icon">
+          <strong>สมาพันธ์ MSME ไทย</strong>
+        </div>
+        <p>จังหวัดนครสวรรค์<br>11/1 หมู่ 7 ตำบลย่านมัทรีค <br>อำเภอพยุหะคีรี จังหวัดนครสวรรค์ 60130</p>
+      </div>
+      <div class="footer-col">
+        <h4>ลิงก์ด่วน</h4>
+        <ul>
+          <li><a href="index.html">หน้าแรก</a></li>
+          <li><a href="#">เกี่ยวกับเรา</a></li>
+          <li><a href="#">โครงการ</a></li>
+          <li><a href="#">สมาชิก</a></li>
+          <li><a href="news.html">ข่าวสาร</a></li>
+          <li><a href="#">ติดต่อเรา</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>ติดต่อ &amp; โซเชียล</h4>
+        <div class="social-icons">
+          <a href="#" aria-label="Facebook"><i class="fa-brands fa-facebook-f"></i></a>
+          <a href="#" aria-label="Line"><i class="fa-brands fa-line"></i></a>
+          <a href="#" aria-label="YouTube"><i class="fa-brands fa-youtube"></i></a>
+          <a href="#" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a>
+        </div>
+        <p class="footer-contact">
+          <i class="fa-solid fa-phone"></i> 061-635-8915<br>
+          <i class="fa-solid fa-envelope"></i> info@msme-nakhonsawan.or.th
+        </p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <div class="container">
+        <p>&copy; 2569 สมาพันธ์ MSME ไทย จังหวัดนครสวรรค์ — สงวนลิขสิทธิ์</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="news.js"></script>
+</body>
+</html>
